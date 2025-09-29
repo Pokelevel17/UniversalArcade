@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Game 1",
+    "thumbnail": "https://via.placeholder.com/220x140?text=Game+1",
+    "url": "https://example.com/game1"
+  },
+  {
+    "title": "Game 2",
+    "thumbnail": "https://via.placeholder.com/220x140?text=Game+2",
+    "url": "https://example.com/game2"
+  },
+  {
+    "title": "Game 3",
+    "thumbnail": "https://via.placeholder.com/220x140?text=Game+3",
+    "url": "https://example.com/game3"
+  }
+]
