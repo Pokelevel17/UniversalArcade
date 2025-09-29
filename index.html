@@ -40,12 +40,26 @@ nav button.active, nav button:hover{ background:rgba(255,255,255,0.2); }
 
 #particles-js{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:0; background:#0f0f1a; }
 
-#browserFrame{ width:100%; height:80vh; border:none; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.5); margin-top:20px; }
+#gameModal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:99; justify-content:center; align-items:center; flex-direction:column; }
+#gameModal iframe{ width:90%; height:80%; border:none; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.6); }
+.modal-buttons{ margin-top:15px; display:flex; gap:10px; }
+.modal-buttons button{ padding:10px 20px; border:none; border-radius:8px; font-size:1rem; cursor:pointer; font-weight:600; transition:0.25s; }
+#closeBtn{ background:#ff4d4d; color:white; } #closeBtn:hover{ background:#e63e3e; }
+#fullscreenBtn{ background:#4da6ff; color:white; } #fullscreenBtn:hover{ background:#1a8cff; }
 
 #loadingScreen{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,15,26,0.95); display:none; flex-direction:column; justify-content:center; align-items:center; z-index:9999; }
 #loadingScreen .loader{ border:6px solid #f3f3f3; border-top:6px solid #4da6ff; border-radius:50%; width:70px; height:70px; animation:spin 1s linear infinite; margin-bottom:15px; }
 @keyframes spin{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
 #loadingScreen p{ color:#fff; font-weight:600; font-size:1.2rem; }
+
+#browserFrame {
+  width: 100%;
+  height: 80vh;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  margin-top: 20px;
+}
 </style>
 </head>
 <body>
@@ -69,7 +83,7 @@ nav button.active, nav button:hover{ background:rgba(255,255,255,0.2); }
   <div id="home" class="tab-page homepage active">
     <div>
       <h1>🎮 Unblocked Hub</h1>
-      <p>Play games and use apps directly in your browser with fullscreen support and a clean UI.</p>
+      <p>Play games, use apps, watch YouTube, or browse the web directly in your browser with fullscreen support.</p>
       <div class="homepage-buttons">
         <button onclick="showTab('games')">Explore Games</button>
         <button onclick="showTab('apps')">Explore Apps</button>
@@ -114,8 +128,17 @@ nav button.active, nav button:hover{ background:rgba(255,255,255,0.2); }
   <!-- Browser -->
   <div id="browser" class="tab-page">
     <h2>Browser</h2>
-    <p>The proxy will automatically load below:</p>
+    <p>The proxy is automatically loaded below:</p>
     <iframe id="browserFrame"></iframe>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="gameModal">
+  <iframe id="gameFrame" src=""></iframe>
+  <div class="modal-buttons">
+    <button id="closeBtn" onclick="closeModal()">Close</button>
+    <button id="fullscreenBtn" onclick="toggleFullscreen()">Fullscreen</button>
   </div>
 </div>
 
@@ -129,7 +152,6 @@ particlesJS("particles-js", {
 });
 
 // Tabs
-let browserLoaded = false;
 function showTab(tab){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
@@ -137,47 +159,82 @@ function showTab(tab){
   document.getElementById(tab+'Tab').classList.add('active');
   document.getElementById('searchBar').style.display = (tab==='games')?'block':'none';
   document.getElementById('searchBarApps').style.display = (tab==='apps')?'block':'none';
-  if(tab === 'browser') loadBrowser();
 }
+
+// Modal
+function openModal(url){
+  document.getElementById('loadingScreen').style.display='flex';
+  setTimeout(()=>{ 
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('gameFrame').src = url;
+    document.getElementById('gameModal').style.display='flex';
+  }, 500);
+}
+function closeModal(){
+  document.getElementById('gameFrame').src='';
+  document.getElementById('gameModal').style.display='none';
+}
+function toggleFullscreen(){
+  const iframe=document.getElementById("gameFrame");
+  if(iframe.requestFullscreen) iframe.requestFullscreen();
+  else if(iframe.mozRequestFullScreen) iframe.mozRequestFullScreen();
+  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+  else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+}
+
+// Search
+document.getElementById("searchBar").addEventListener("keyup", function(){
+  let filter=this.value.toLowerCase();
+  document.querySelectorAll("#games .item").forEach(i=>{
+    i.style.display=i.getAttribute("data-title").toLowerCase().includes(filter)?'block':'none';
+  });
+});
+document.getElementById("searchBarApps").addEventListener("keyup", function(){
+  let filter=this.value.toLowerCase();
+  document.querySelectorAll("#apps .item").forEach(i=>{
+    i.style.display=i.getAttribute("data-title").toLowerCase().includes(filter)?'block':'none';
+  });
+});
 
 // Load Games
-fetch("games.json").then(res=>res.json()).then(data=>{
-  const grid=document.getElementById("gamesGrid");
-  data.forEach(game=>{
-    const item=document.createElement("div");
-    item.classList.add("item");
-    item.setAttribute("data-title", game.title);
-    item.onclick=()=>openModal(game.url);
-    item.innerHTML=`<img src="${game.thumbnail}" alt="${game.title}"><span>${game.title}</span>`;
-    grid.appendChild(item);
+fetch("games.json")
+  .then(res => res.json())
+  .then(data => {
+    const grid = document.getElementById("gamesGrid");
+    data.forEach(game => {
+      const item = document.createElement("div");
+      item.classList.add("item");
+      item.setAttribute("data-title", game.title);
+      item.onclick = () => openModal(game.url);
+      item.innerHTML = `<img src="${game.thumbnail}" alt="${game.title}"><span>${game.title}</span>`;
+      grid.appendChild(item);
+    });
   });
-});
 
 // Load Apps
-fetch("apps.json").then(res=>res.json()).then(data=>{
-  const grid=document.getElementById("appsGrid");
-  data.forEach(app=>{
-    const item=document.createElement("div");
-    item.classList.add("item");
-    item.setAttribute("data-title", app.title);
-    item.onclick=()=>openModal(app.url);
-    item.innerHTML=`<img src="${app.thumbnail}" alt="${app.title}"><span>${app.title}</span>`;
-    grid.appendChild(item);
-  });
-});
-
-// Load Browser automatically inside iframe
-function loadBrowser(){
-  if(browserLoaded) return;
-  fetch("browser.json")
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.url){
-        document.getElementById("browserFrame").src = data.url;
-        browserLoaded = true;
-      }
+fetch("apps.json")
+  .then(res => res.json())
+  .then(data => {
+    const grid = document.getElementById("appsGrid");
+    data.forEach(app => {
+      const item = document.createElement("div");
+      item.classList.add("item");
+      item.setAttribute("data-title", app.title);
+      item.onclick = () => openModal(app.url);
+      item.innerHTML = `<img src="${app.thumbnail}" alt="${app.title}"><span>${app.title}</span>`;
+      grid.appendChild(item);
     });
-}
+  });
+
+// Load Browser
+fetch("browser.json")
+  .then(res => res.json())
+  .then(data => {
+    if(data.url){
+      document.getElementById("browserFrame").src = data.url;
+    }
+  })
+  .catch(err => console.error("Failed to load browser.json", err));
 
 // YouTube
 function playYouTube(e){
@@ -194,11 +251,9 @@ function playYouTube(e){
     let urlObj=new URL(url);
     if(urlObj.hostname.includes('youtu.be')) videoId=urlObj.pathname.slice(1);
     else if(urlObj.hostname.includes('youtube.com')) videoId=urlObj.searchParams.get('v');
-  }catch(err){ videoId=null; }
-  if(videoId){
-    ytFrame.src='https://www.youtube.com/embed/'+videoId+'?autoplay=1';
-    ytFrame.style.display='block';
-  }else ytError.style.display='block';
+  } catch(err){ videoId=null; }
+  if(videoId){ ytFrame.src='https://www.youtube.com/embed/'+videoId+'?autoplay=1'; ytFrame.style.display='block'; }
+  else ytError.style.display='block';
 }
 </script>
 </body>
