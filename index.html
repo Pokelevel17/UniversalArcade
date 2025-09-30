@@ -33,7 +33,7 @@ nav button.active, nav button:hover{ background:rgba(255,255,255,0.2); }
 
 .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:30px; margin-top:20px; }
 
-/* --- Tiles same size --- */
+/* --- Tiles same size and square --- */
 .item {
   background: rgba(255,255,255,0.05);
   border-radius: 20px;
@@ -43,29 +43,35 @@ nav button.active, nav button:hover{ background:rgba(255,255,255,0.2); }
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: 260px; /* fixed height */
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1; /* ensures square shape */
   overflow: hidden;
+  padding: 15px;
 }
 
 .item img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 15px;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  border-radius: 12px;
   margin-bottom: 12px;
-  flex-shrink: 0;
   transition: transform 0.3s ease;
 }
 
 .item span {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #fff;
-  margin-top: auto;
   text-align: center;
-  display: block;
-  padding: 0 5px;
+  word-break: break-word;
+}
+
+/* Optional: hover effect for clean UI */
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+  background: rgba(255,255,255,0.1);
 }
 
 #particles-js{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:0; background:#0f0f1a; }
