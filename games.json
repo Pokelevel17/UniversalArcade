@@ -1,17 +1,12 @@
 [
   {
-    "title": "Elastic Man",
-    "thumbnail": "https://unblocked-games.s3.amazonaws.com/media/posts/703/elastic-man.webp",
-    "url": "https://unblocked-games.s3.amazonaws.com/games/2025/more/elastic-man/gm/index.html"
+    "title": "Snake Classic",
+    "url": "games/game1/index.html",
+    "thumbnail": "games/game1/thumbnail.png"
   },
   {
-    "title": "Game 2",
-    "thumbnail": "https://via.placeholder.com/220x140?text=Game+2",
-    "url": "https://example.com/game2"
-  },
-  {
-    "title": "Game 3",
-    "thumbnail": "https://via.placeholder.com/220x140?text=Game+3",
-    "url": "https://example.com/game3"
+    "title": "Maze Runner",
+    "url": "games/game2/index.html",
+    "thumbnail": "games/game2/thumbnail.png"
   }
 ]
