@@ -1,8 +1,8 @@
 [
   {
-    "title": "Snake Classic",
-    "url": "games/game1/index.html",
-    "thumbnail": "games/game1/thumbnail.png"
+    "title": "Slope",
+    "url": "games/slope/slope.html",
+    "thumbnail": "https://slopegamefree.github.io/rs/imgs/slope-game3.jpg"
   },
   {
     "title": "Maze Runner",
