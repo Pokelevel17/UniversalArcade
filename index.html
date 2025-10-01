@@ -83,13 +83,16 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 }
 #searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
 
-/* --- Grid Tiles --- */
+/* --- Grid Tiles Fixed Size --- */
 .grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display:grid;
+  grid-template-columns:repeat(auto-fill, 180px);
+  justify-content:center;
+  gap:20px;
 }
 .item {
+  width:180px;
+  height:240px;
   position: relative;
   overflow: hidden;
   border-radius: 16px;
@@ -315,11 +318,15 @@ function ytFullscreen(){ const ytFrame=document.getElementById("ytFrame"); if(yt
 // --- Search ---
 document.getElementById("searchBar").addEventListener("keyup",function(){
   const filter=this.value.toLowerCase();
-  document.querySelectorAll("#games .item").forEach(i=>i.style.display=i.getAttribute("data-title").toLowerCase().includes(filter)?'block':'none');
+  document.querySelectorAll("#games .item").forEach(i=>{
+    i.style.visibility=i.getAttribute("data-title").toLowerCase().includes(filter)?'visible':'hidden';
+  });
 });
 document.getElementById("searchBarApps").addEventListener("keyup",function(){
   const filter=this.value.toLowerCase();
-  document.querySelectorAll("#apps .item").forEach(i=>i.style.display=i.getAttribute("data-title").toLowerCase().includes(filter)?'block':'none');
+  document.querySelectorAll("#apps .item").forEach(i=>{
+    i.style.visibility=i.getAttribute("data-title").toLowerCase().includes(filter)?'visible':'hidden';
+  });
 });
 
 // --- Load JSON ---
