@@ -28,5 +28,10 @@
     "title": "Basketball Stars",
     "url": "games/basketball-stars",
     "thumbnail": "https://m.media-amazon.com/images/I/4170y5pRMTL.png"
+  },
+  {
+    "title": "woahhhh",
+    "url": "openAg('https://games.crazygames.com/en_US/buildnow-gg/index.html')",
+    "thumbnail": "https://m.media-amazon.com/images/I/4170y5pRMTL.png"
   }
 ]
