@@ -50,30 +50,18 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 .homepage-buttons {
   display:flex; justify-content:center; flex-wrap:wrap; gap:18px;
 }
-.homepage-buttons button {
+.homepage-buttons button, .homepage-buttons a.button {
   padding:14px 34px;
   font-size:1.1rem; font-weight:600;
   border:none; border-radius:14px;
   color:#fff;
   background:linear-gradient(135deg,#4da6ff,#8c5bff);
   cursor:pointer; transition:0.25s;
+  text-decoration:none;
+  display:inline-block;
+  text-align:center;
 }
-.homepage-buttons button:hover { transform:translateY(-3px) scale(1.03); }
-/* Proxy button style */
-.button {
-  display: inline-block;
-  padding: 12px 28px;
-  background: #4CAF50;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: bold;
-  transition: 0.25s;
-}
-.button:hover {
-  background: #45a049;
-  transform: translateY(-2px) scale(1.02);
-}
+.homepage-buttons button:hover, .homepage-buttons a.button:hover { transform:translateY(-3px) scale(1.03); }
 .features {
   margin-top:60px;
   display:grid; gap:25px;
@@ -96,7 +84,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   background:rgba(255,255,255,0.07); color:#fff;
   font-size:1rem; outline:none;
 }
-#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa'; }
+#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
 
 /* --- Grid Tiles Fixed Size --- */
 .grid {
@@ -173,9 +161,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   z-index:200; justify-content:center; align-items:center; flex-direction:column;
 }
 #gameModal iframe {
-  width:90vw;
-  height:90vh;
-  max-height:95vh;
+  width:80vw; height:calc(80vw * 9/16); max-height:85vh;
   border:none; border-radius:14px;
 }
 .modal-buttons { margin-top:15px; }
@@ -229,7 +215,8 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
         <button onclick="showTab('games')">🎮 Explore Games</button>
         <button onclick="showTab('apps')">📱 Explore Apps</button>
         <button onclick="showTab('youtube')">▶️ YouTube Player</button>
-        <a href="Ultraviolet" target="_blank" class="button">Open Proxy</a>
+        <!-- Proxy button -->
+        <a href="https://Pokelevel17.github.io/UniversalArcade/Ultraviolet/" target="_blank" class="button">🌐 Open Proxy</a>
       </div>
     </div>
     <div class="features">
@@ -293,8 +280,8 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-// --- Ultraviolet Proxy URL ---
-const UV_PROXY = "https://cytoplasmic-lashonda-nonfallacious.ngrok-free.dev/";
+// --- Proxy URL ---
+const UV_PROXY = "https://Pokelevel17.github.io/UniversalArcade/Ultraviolet/";
 
 // --- Particles ---
 particlesJS("particles-js",{particles:{number:{value:85},color:{value:"#fff"},opacity:{value:0.5},size:{value:3},line_linked:{enable:true,opacity:0.3},move:{enable:true,speed:2}},interactivity:{events:{onhover:{enable:true,mode:"repulse"}},modes:{repulse:{distance:100}}},retina_detect:true});
@@ -315,10 +302,9 @@ function openModal(url){
   const loader=document.getElementById('loadingScreen');
   const iframe=document.getElementById('gameFrame');
   loader.style.display='flex'; iframe.src='';
-  const proxiedUrl = UV_PROXY + url;
   setTimeout(()=>{
     loader.style.display='none';
-    iframe.src=proxiedUrl;
+    iframe.src = UV_PROXY + url; // open games/apps through proxy
     document.getElementById('gameModal').style.display='flex';
   },150);
 }
