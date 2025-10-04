@@ -163,7 +163,6 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
     <button id="gamesTab" onclick="showTab('games')">Games</button>
     <button id="appsTab" onclick="showTab('apps')">Apps</button>
     <button id="youtubeTab" onclick="showTab('youtube')">YouTube</button>
-    <button id="proxyTab" onclick="openProxy()">🌐 Proxy</button>
   </nav>
 </header>
 
@@ -319,11 +318,6 @@ fetch("apps.json").then(r=>r.json()).then(data=>{
 // --- Last Updated ---
 document.getElementById("lastUpdated").textContent =
   new Date(document.lastModified).toLocaleDateString();
-
-// --- Ultraviolet Proxy ---
-function openProxy() {
-  window.open("/proxy/index.html", "_blank");
-}
 </script>
 </body>
 </html>
