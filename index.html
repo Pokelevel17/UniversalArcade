@@ -40,28 +40,37 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 @keyframes fadeIn { from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
 
 /* --- Homepage --- */
-.homepage { text-align:center; padding:60px 20px; }
+.homepage {
+  text-align:center;
+  padding:60px 20px;
+}
 .hero { margin-bottom:60px; }
 .hero h1 { font-size:3rem; font-weight:700; margin-bottom:16px; }
 .hero p { font-size:1.2rem; color:#aaa; max-width:700px; margin:0 auto 30px; line-height:1.6; }
-.homepage-buttons { display:flex; justify-content:center; flex-wrap:wrap; gap:18px; }
-.homepage-buttons button, .homepage-buttons .button {
+.homepage-buttons {
+  display:flex; justify-content:center; flex-wrap:wrap; gap:18px;
+}
+.homepage-buttons button, .homepage-buttons a.button {
   padding:14px 34px;
   font-size:1.1rem; font-weight:600;
   border:none; border-radius:14px;
   color:#fff;
+  background:linear-gradient(135deg,#4da6ff,#8c5bff);
   cursor:pointer; transition:0.25s;
+  text-decoration:none;
+  display:inline-block;
 }
-.homepage-buttons button { background:linear-gradient(135deg,#4da6ff,#8c5bff); }
-.homepage-buttons button:hover { transform:translateY(-3px) scale(1.03); }
-.homepage-buttons .button { background:#4CAF50; text-decoration:none; display:inline-block; }
+.homepage-buttons button:hover, .homepage-buttons a.button:hover { transform:translateY(-3px) scale(1.03); }
 .features {
-  margin-top:60px; display:grid; gap:25px;
+  margin-top:60px;
+  display:grid; gap:25px;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 }
 .feature {
   background:rgba(255,255,255,0.05);
-  border-radius:16px; padding:24px; text-align:center; transition:0.3s;
+  border-radius:16px; padding:24px;
+  text-align:center;
+  transition:0.3s;
 }
 .feature:hover { background:rgba(255,255,255,0.08); transform:translateY(-6px); }
 .feature h3 { font-size:1.2rem; margin-bottom:10px; }
@@ -71,52 +80,106 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 #searchBar, #searchBarApps {
   width:100%; padding:14px 18px; margin-bottom:25px;
   border:none; border-radius:14px;
-  background:rgba(255,255,255,0.07); color:#fff; font-size:1rem; outline:none;
+  background:rgba(255,255,255,0.07); color:#fff;
+  font-size:1rem; outline:none;
 }
-#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
+#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa'; }
 
 /* --- Grid Tiles Fixed Size --- */
 .grid {
-  display:grid; grid-template-columns:repeat(auto-fill, 180px);
-  justify-content:center; gap:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill, 180px);
+  justify-content:center;
+  gap:20px;
 }
 .item {
-  width:180px; height:240px; position: relative; overflow: hidden; border-radius: 16px;
-  cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
+  width:180px;
+  height:240px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
   background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.05));
-  box-shadow: 0 4px 15px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .item img {
-  width:100%; height:140px; object-fit: cover; border-bottom:1px solid rgba(255,255,255,0.1);
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   transition: transform 0.3s;
 }
-.item span { padding:12px; font-weight:600; font-size:0.95rem; text-align:center; color:#fff; flex-grow:1; }
-.item:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.4); }
-.item:hover img { transform:scale(1.05); }
-.item::after { content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%); pointer-events:none; }
+.item span {
+  padding: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  color: #fff;
+  flex-grow: 1;
+}
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+.item:hover img {
+  transform: scale(1.05);
+}
+.item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%);
+  pointer-events: none;
+}
 
 /* --- YouTube Player --- */
-#ytWrapper { max-width:900px; margin:30px auto 0; border-radius:16px; overflow:hidden; background:rgba(0,0,0,0.4); box-shadow:0 6px 25px rgba(0,0,0,0.6); position:relative; }
-#ytFullscreenBtn { position:absolute; top:12px; right:12px; padding:8px 14px; border:none; border-radius:8px; background:#4da6ff; color:#fff; font-weight:600; cursor:pointer; transition:0.25s; }
+#ytWrapper {
+  max-width:900px; margin:30px auto 0;
+  border-radius:16px; overflow:hidden;
+  background:rgba(0,0,0,0.4);
+  box-shadow:0 6px 25px rgba(0,0,0,0.6);
+  position:relative;
+}
+#ytFullscreenBtn {
+  position:absolute; top:12px; right:12px;
+  padding:8px 14px;
+  border:none; border-radius:8px;
+  background:#4da6ff; color:#fff; font-weight:600;
+  cursor:pointer; transition:0.25s;
+}
 #ytFullscreenBtn:hover { background:#1a8cff; }
 
 /* --- Modal --- */
 #gameModal {
-  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
   z-index:200; justify-content:center; align-items:center; flex-direction:column;
 }
-#gameModal iframe { width:80vw; height:calc(80vw*9/16); max-height:85vh; border:none; border-radius:14px; }
+#gameModal iframe {
+  width:80vw; height:calc(80vw * 9/16); max-height:85vh;
+  border:none; border-radius:14px;
+}
 .modal-buttons { margin-top:15px; }
-#closeBtn { padding:10px 20px; border:none; border-radius:8px; background:#ff4d4d; color:#fff; font-weight:600; cursor:pointer; transition:0.25s; }
+#closeBtn {
+  padding:10px 20px; border:none; border-radius:8px;
+  background:#ff4d4d; color:#fff; font-weight:600;
+  cursor:pointer; transition:0.25s;
+}
 #closeBtn:hover { background:#e63e3e; }
 
 /* --- Loader --- */
 #loadingScreen {
-  position:fixed; inset:0; z-index:9999; background:rgba(15,15,26,0.95);
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(15,15,26,0.95);
   display:none; flex-direction:column; justify-content:center; align-items:center;
 }
 #loadingScreen .loader {
-  border:6px solid #f3f3f3; border-top:6px solid #4da6ff; border-radius:50%; width:70px; height:70px;
+  border:6px solid #f3f3f3; border-top:6px solid #4da6ff;
+  border-radius:50%; width:70px; height:70px;
   animation:spin 1s linear infinite; margin-bottom:15px;
 }
 @keyframes spin { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
@@ -138,6 +201,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
     <button id="gamesTab" onclick="showTab('games')">Games</button>
     <button id="appsTab" onclick="showTab('apps')">Apps</button>
     <button id="youtubeTab" onclick="showTab('youtube')">YouTube</button>
+    <a href="/proxy" target="_blank" class="button">Open Proxy</a>
   </nav>
 </header>
 
@@ -151,13 +215,22 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
         <button onclick="showTab('games')">🎮 Explore Games</button>
         <button onclick="showTab('apps')">📱 Explore Apps</button>
         <button onclick="showTab('youtube')">▶️ YouTube Player</button>
-        <a href="Ultraviolet" target="_blank" class="button">Open Proxy</a>
+        <a href="/proxy" target="_blank" class="button">Open Proxy</a>
       </div>
     </div>
     <div class="features">
-      <div class="feature"><h3>⚡ Fast Loading</h3><p>Optimized for speed so your favorite games and apps launch instantly.</p></div>
-      <div class="feature"><h3>🖥️ Fullscreen Mode</h3><p>Enjoy a fully immersive experience with one-click fullscreen support.</p></div>
-      <div class="feature"><h3>🎨 Clean UI</h3><p>A modern, distraction-free design that focuses on what you love.</p></div>
+      <div class="feature">
+        <h3>⚡ Fast Loading</h3>
+        <p>Optimized for speed so your favorite games and apps launch instantly.</p>
+      </div>
+      <div class="feature">
+        <h3>🖥️ Fullscreen Mode</h3>
+        <p>Enjoy a fully immersive experience with one-click fullscreen support.</p>
+      </div>
+      <div class="feature">
+        <h3>🎨 Clean UI</h3>
+        <p>A modern, distraction-free design that focuses on what you love.</p>
+      </div>
     </div>
     <div style="margin-top:50px; text-align:center; color:#aaa; font-size:0.9rem;">
       <p>Made by <strong>Fusionzzz</strong></p>
@@ -214,25 +287,19 @@ function showTab(tab){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById(tab).classList.add('active');
-  document.getElementById(tab+'Tab').classList.add('active');
+  const tabBtn = document.getElementById(tab+'Tab');
+  if(tabBtn) tabBtn.classList.add('active');
   document.getElementById('searchBar').style.display=(tab==='games')?'block':'none';
   document.getElementById('searchBarApps').style.display=(tab==='apps')?'block':'none';
   if(tab!=='youtube'){ document.getElementById('ytFrame').src=''; }
 }
-
-// --- Ultraviolet Proxy Base URL ---
-const UV_PROXY = "https://Pokelevel17.github.io/UniversalArcade/Ultraviolet/";
 
 // --- Modal ---
 function openModal(url){
   const loader=document.getElementById('loadingScreen');
   const iframe=document.getElementById('gameFrame');
   loader.style.display='flex'; iframe.src='';
-  setTimeout(()=>{
-    loader.style.display='none';
-    iframe.src = UV_PROXY + url;
-    document.getElementById('gameModal').style.display='flex';
-  },150);
+  setTimeout(()=>{ loader.style.display='none'; iframe.src=url; document.getElementById('gameModal').style.display='flex'; },150);
 }
 function closeModal(){ document.getElementById('gameFrame').src=''; document.getElementById('gameModal').style.display='none'; }
 
@@ -267,27 +334,31 @@ document.getElementById("searchBarApps").addEventListener("keyup",function(){
   });
 });
 
-// --- Load Items from JSON ---
-function loadItems(jsonFile, gridId){
-  fetch(jsonFile)
-    .then(r=>r.json())
-    .then(data=>{
-      const grid=document.getElementById(gridId);
-      data.forEach(item=>{
-        const div=document.createElement("div");
-        div.classList.add("item");
-        div.setAttribute("data-title", item.title);
-        div.onclick = ()=>openModal(item.url);
-        div.innerHTML = `<img src="${item.thumbnail}" alt="${item.title}"><span>${item.title}</span>`;
-        grid.appendChild(div);
-      });
-    });
-}
-loadItems("games.json","gamesGrid");
-loadItems("apps.json","appsGrid");
+// --- Load JSON ---
+fetch("games.json").then(r=>r.json()).then(data=>{
+  const grid=document.getElementById("gamesGrid");
+  data.forEach(g=>{
+    const item=document.createElement("div");
+    item.classList.add("item"); item.setAttribute("data-title",g.title);
+    item.onclick=()=>openModal(g.url);
+    item.innerHTML=`<img src="${g.thumbnail}" alt="${g.title}"><span>${g.title}</span>`;
+    grid.appendChild(item);
+  });
+});
+fetch("apps.json").then(r=>r.json()).then(data=>{
+  const grid=document.getElementById("appsGrid");
+  data.forEach(app=>{
+    const item=document.createElement("div");
+    item.classList.add("item"); item.setAttribute("data-title",app.title);
+    item.onclick=()=>openModal(app.url);
+    item.innerHTML=`<img src="${app.thumbnail}" alt="${app.title}"><span>${app.title}</span>`;
+    grid.appendChild(item);
+  });
+});
 
 // --- Last Updated ---
-document.getElementById("lastUpdated").textContent = new Date(document.lastModified).toLocaleDateString();
+document.getElementById("lastUpdated").textContent =
+  new Date(document.lastModified).toLocaleDateString();
 </script>
 </body>
 </html>
