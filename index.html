@@ -152,22 +152,24 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 #ytFullscreenBtn:hover { background:#1a8cff; }
 
 /* --- Modal --- */
-#gameModal {
+#gameModal, #proxyModal {
   display:none; position:fixed; inset:0;
   background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
   z-index:200; justify-content:center; align-items:center; flex-direction:column;
 }
-#gameModal iframe {
+#gameModal iframe, #proxyModal iframe {
   width:80vw; height:calc(80vw * 9/16); max-height:85vh;
   border:none; border-radius:14px;
 }
 .modal-buttons { margin-top:15px; }
-#closeBtn {
+#closeBtn, #closeProxyBtn {
   padding:10px 20px; border:none; border-radius:8px;
-  background:#ff4d4d; color:#fff; font-weight:600;
-  cursor:pointer; transition:0.25s;
+  font-weight:600; cursor:pointer; transition:0.25s;
 }
+#closeBtn { background:#ff4d4d; color:#fff; }
 #closeBtn:hover { background:#e63e3e; }
+#closeProxyBtn { background:#4da6ff; color:#fff; margin-top:10px; }
+#closeProxyBtn:hover { background:#1a8cff; }
 
 /* --- Loader --- */
 #loadingScreen {
@@ -199,6 +201,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
     <button id="gamesTab" onclick="showTab('games')">Games</button>
     <button id="appsTab" onclick="showTab('apps')">Apps</button>
     <button id="youtubeTab" onclick="showTab('youtube')">YouTube</button>
+    <button id="proxyTab" onclick="openProxy()">Proxy</button>
   </nav>
 </header>
 
@@ -213,24 +216,6 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
         <button onclick="showTab('apps')">📱 Explore Apps</button>
         <button onclick="showTab('youtube')">▶️ YouTube Player</button>
       </div>
-    </div>
-    <div class="features">
-      <div class="feature">
-        <h3>⚡ Fast Loading</h3>
-        <p>Optimized for speed so your favorite games and apps launch instantly.</p>
-      </div>
-      <div class="feature">
-        <h3>🖥️ Fullscreen Mode</h3>
-        <p>Enjoy a fully immersive experience with one-click fullscreen support.</p>
-      </div>
-      <div class="feature">
-        <h3>🎨 Clean UI</h3>
-        <p>A modern, distraction-free design that focuses on what you love.</p>
-      </div>
-    </div>
-    <div style="margin-top:50px; text-align:center; color:#aaa; font-size:0.9rem;">
-      <p>Made by <strong>Fusionzzz</strong></p>
-      <p>Last updated: <span id="lastUpdated"></span></p>
     </div>
   </div>
 
@@ -265,11 +250,19 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Game Modal -->
 <div id="gameModal">
   <iframe id="gameFrame" src=""></iframe>
   <div class="modal-buttons">
     <button id="closeBtn" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- Proxy Modal -->
+<div id="proxyModal">
+  <iframe src="Ultraviolet"></iframe>
+  <div class="modal-buttons">
+    <button id="closeProxyBtn" onclick="closeProxy()">Close Proxy</button>
   </div>
 </div>
 
@@ -282,8 +275,8 @@ particlesJS("particles-js",{particles:{number:{value:85},color:{value:"#fff"},op
 function showTab(tab){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(tab).classList.add('active');
-  document.getElementById(tab+'Tab').classList.add('active');
+  if(tab!=='proxy') document.getElementById(tab).classList.add('active');
+  document.getElementById(tab+'Tab')?.classList.add('active');
   document.getElementById('searchBar').style.display=(tab==='games')?'block':'none';
   document.getElementById('searchBarApps').style.display=(tab==='apps')?'block':'none';
   if(tab!=='youtube'){ document.getElementById('ytFrame').src=''; }
@@ -297,6 +290,10 @@ function openModal(url){
   setTimeout(()=>{ loader.style.display='none'; iframe.src=url; document.getElementById('gameModal').style.display='flex'; },150);
 }
 function closeModal(){ document.getElementById('gameFrame').src=''; document.getElementById('gameModal').style.display='none'; }
+
+// --- Proxy Modal ---
+function openProxy(){ document.getElementById('proxyModal').style.display='flex'; }
+function closeProxy(){ document.getElementById('proxyModal').style.display='none'; }
 
 // --- YouTube ---
 function playYouTube(e){
@@ -329,7 +326,7 @@ document.getElementById("searchBarApps").addEventListener("keyup",function(){
   });
 });
 
-// --- Load JSON ---
+// --- Load JSON for games/apps ---
 fetch("games.json").then(r=>r.json()).then(data=>{
   const grid=document.getElementById("gamesGrid");
   data.forEach(g=>{
@@ -352,7 +349,7 @@ fetch("apps.json").then(r=>r.json()).then(data=>{
 });
 
 // --- Last Updated ---
-document.getElementById("lastUpdated").textContent =
+document.getElementById("lastUpdated")?.textContent =
   new Date(document.lastModified).toLocaleDateString();
 </script>
 </body>
