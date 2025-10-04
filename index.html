@@ -59,6 +59,21 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   cursor:pointer; transition:0.25s;
 }
 .homepage-buttons button:hover { transform:translateY(-3px) scale(1.03); }
+/* Proxy button style */
+.button {
+  display: inline-block;
+  padding: 12px 28px;
+  background: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.25s;
+}
+.button:hover {
+  background: #45a049;
+  transform: translateY(-2px) scale(1.02);
+}
 .features {
   margin-top:60px;
   display:grid; gap:25px;
@@ -81,7 +96,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   background:rgba(255,255,255,0.07); color:#fff;
   font-size:1rem; outline:none;
 }
-#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
+#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa'; }
 
 /* --- Grid Tiles Fixed Size --- */
 .grid {
@@ -152,24 +167,24 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 #ytFullscreenBtn:hover { background:#1a8cff; }
 
 /* --- Modal --- */
-#gameModal, #proxyModal {
+#gameModal {
   display:none; position:fixed; inset:0;
   background:rgba(0,0,0,0.85); backdrop-filter:blur(10px);
   z-index:200; justify-content:center; align-items:center; flex-direction:column;
 }
-#gameModal iframe, #proxyModal iframe {
-  width:80vw; height:calc(80vw * 9/16); max-height:85vh;
+#gameModal iframe {
+  width:90vw;
+  height:90vh;
+  max-height:95vh;
   border:none; border-radius:14px;
 }
 .modal-buttons { margin-top:15px; }
-#closeBtn, #closeProxyBtn {
+#closeBtn {
   padding:10px 20px; border:none; border-radius:8px;
-  font-weight:600; cursor:pointer; transition:0.25s;
+  background:#ff4d4d; color:#fff; font-weight:600;
+  cursor:pointer; transition:0.25s;
 }
-#closeBtn { background:#ff4d4d; color:#fff; }
 #closeBtn:hover { background:#e63e3e; }
-#closeProxyBtn { background:#4da6ff; color:#fff; margin-top:10px; }
-#closeProxyBtn:hover { background:#1a8cff; }
 
 /* --- Loader --- */
 #loadingScreen {
@@ -201,7 +216,6 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
     <button id="gamesTab" onclick="showTab('games')">Games</button>
     <button id="appsTab" onclick="showTab('apps')">Apps</button>
     <button id="youtubeTab" onclick="showTab('youtube')">YouTube</button>
-    <button id="proxyTab" onclick="openProxy()">Proxy</button>
   </nav>
 </header>
 
@@ -215,7 +229,26 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
         <button onclick="showTab('games')">🎮 Explore Games</button>
         <button onclick="showTab('apps')">📱 Explore Apps</button>
         <button onclick="showTab('youtube')">▶️ YouTube Player</button>
+        <a href="Ultraviolet" target="_blank" class="button">Open Proxy</a>
       </div>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <h3>⚡ Fast Loading</h3>
+        <p>Optimized for speed so your favorite games and apps launch instantly.</p>
+      </div>
+      <div class="feature">
+        <h3>🖥️ Fullscreen Mode</h3>
+        <p>Enjoy a fully immersive experience with one-click fullscreen support.</p>
+      </div>
+      <div class="feature">
+        <h3>🎨 Clean UI</h3>
+        <p>A modern, distraction-free design that focuses on what you love.</p>
+      </div>
+    </div>
+    <div style="margin-top:50px; text-align:center; color:#aaa; font-size:0.9rem;">
+      <p>Made by <strong>Fusionzzz</strong></p>
+      <p>Last updated: <span id="lastUpdated"></span></p>
     </div>
   </div>
 
@@ -250,7 +283,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   </div>
 </div>
 
-<!-- Game Modal -->
+<!-- Modal -->
 <div id="gameModal">
   <iframe id="gameFrame" src=""></iframe>
   <div class="modal-buttons">
@@ -258,16 +291,11 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   </div>
 </div>
 
-<!-- Proxy Modal -->
-<div id="proxyModal">
-  <iframe src="Ultraviolet"></iframe>
-  <div class="modal-buttons">
-    <button id="closeProxyBtn" onclick="closeProxy()">Close Proxy</button>
-  </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
+// --- Ultraviolet Proxy URL ---
+const UV_PROXY = "https://cytoplasmic-lashonda-nonfallacious.ngrok-free.dev/";
+
 // --- Particles ---
 particlesJS("particles-js",{particles:{number:{value:85},color:{value:"#fff"},opacity:{value:0.5},size:{value:3},line_linked:{enable:true,opacity:0.3},move:{enable:true,speed:2}},interactivity:{events:{onhover:{enable:true,mode:"repulse"}},modes:{repulse:{distance:100}}},retina_detect:true});
 
@@ -275,8 +303,8 @@ particlesJS("particles-js",{particles:{number:{value:85},color:{value:"#fff"},op
 function showTab(tab){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  if(tab!=='proxy') document.getElementById(tab).classList.add('active');
-  document.getElementById(tab+'Tab')?.classList.add('active');
+  document.getElementById(tab).classList.add('active');
+  document.getElementById(tab+'Tab').classList.add('active');
   document.getElementById('searchBar').style.display=(tab==='games')?'block':'none';
   document.getElementById('searchBarApps').style.display=(tab==='apps')?'block':'none';
   if(tab!=='youtube'){ document.getElementById('ytFrame').src=''; }
@@ -287,13 +315,14 @@ function openModal(url){
   const loader=document.getElementById('loadingScreen');
   const iframe=document.getElementById('gameFrame');
   loader.style.display='flex'; iframe.src='';
-  setTimeout(()=>{ loader.style.display='none'; iframe.src=url; document.getElementById('gameModal').style.display='flex'; },150);
+  const proxiedUrl = UV_PROXY + url;
+  setTimeout(()=>{
+    loader.style.display='none';
+    iframe.src=proxiedUrl;
+    document.getElementById('gameModal').style.display='flex';
+  },150);
 }
 function closeModal(){ document.getElementById('gameFrame').src=''; document.getElementById('gameModal').style.display='none'; }
-
-// --- Proxy Modal ---
-function openProxy(){ document.getElementById('proxyModal').style.display='flex'; }
-function closeProxy(){ document.getElementById('proxyModal').style.display='none'; }
 
 // --- YouTube ---
 function playYouTube(e){
@@ -326,7 +355,7 @@ document.getElementById("searchBarApps").addEventListener("keyup",function(){
   });
 });
 
-// --- Load JSON for games/apps ---
+// --- Load JSON ---
 fetch("games.json").then(r=>r.json()).then(data=>{
   const grid=document.getElementById("gamesGrid");
   data.forEach(g=>{
@@ -349,7 +378,7 @@ fetch("apps.json").then(r=>r.json()).then(data=>{
 });
 
 // --- Last Updated ---
-document.getElementById("lastUpdated")?.textContent =
+document.getElementById("lastUpdated").textContent =
   new Date(document.lastModified).toLocaleDateString();
 </script>
 </body>
