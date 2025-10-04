@@ -50,18 +50,15 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 .homepage-buttons {
   display:flex; justify-content:center; flex-wrap:wrap; gap:18px;
 }
-.homepage-buttons button, .homepage-buttons a.button {
+.homepage-buttons button {
   padding:14px 34px;
   font-size:1.1rem; font-weight:600;
   border:none; border-radius:14px;
   color:#fff;
   background:linear-gradient(135deg,#4da6ff,#8c5bff);
   cursor:pointer; transition:0.25s;
-  text-decoration:none;
-  display:inline-block;
-  text-align:center;
 }
-.homepage-buttons button:hover, .homepage-buttons a.button:hover { transform:translateY(-3px) scale(1.03); }
+.homepage-buttons button:hover { transform:translateY(-3px) scale(1.03); }
 .features {
   margin-top:60px;
   display:grid; gap:25px;
@@ -84,7 +81,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   background:rgba(255,255,255,0.07); color:#fff;
   font-size:1rem; outline:none;
 }
-#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
+#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa'; }
 
 /* --- Grid Tiles Fixed Size --- */
 .grid {
@@ -188,6 +185,17 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 
 /* --- Particles BG --- */
 #particles-js { position:fixed; inset:0; z-index:-1; background:#0d0d12; }
+
+/* --- Proxy Button --- */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
 </style>
 </head>
 <body>
@@ -215,8 +223,8 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
         <button onclick="showTab('games')">🎮 Explore Games</button>
         <button onclick="showTab('apps')">📱 Explore Apps</button>
         <button onclick="showTab('youtube')">▶️ YouTube Player</button>
-        <!-- Proxy button -->
-        <a href="https://Pokelevel17.github.io/UniversalArcade/Ultraviolet/" target="_blank" class="button">🌐 Open Proxy</a>
+        <!-- Proxy Button -->
+        <a href="Ultraviolet" target="_blank" class="button">Open Proxy</a>
       </div>
     </div>
     <div class="features">
@@ -280,9 +288,6 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-// --- Proxy URL ---
-const UV_PROXY = "https://Pokelevel17.github.io/UniversalArcade/Ultraviolet/";
-
 // --- Particles ---
 particlesJS("particles-js",{particles:{number:{value:85},color:{value:"#fff"},opacity:{value:0.5},size:{value:3},line_linked:{enable:true,opacity:0.3},move:{enable:true,speed:2}},interactivity:{events:{onhover:{enable:true,mode:"repulse"}},modes:{repulse:{distance:100}}},retina_detect:true});
 
@@ -297,6 +302,9 @@ function showTab(tab){
   if(tab!=='youtube'){ document.getElementById('ytFrame').src=''; }
 }
 
+// --- Proxy URL ---
+const UV_PROXY = "https://Pokelevel17.github.io/UniversalArcade/Ultraviolet/";
+
 // --- Modal ---
 function openModal(url){
   const loader=document.getElementById('loadingScreen');
@@ -304,7 +312,7 @@ function openModal(url){
   loader.style.display='flex'; iframe.src='';
   setTimeout(()=>{
     loader.style.display='none';
-    iframe.src = UV_PROXY + url; // open games/apps through proxy
+    iframe.src = UV_PROXY + url;
     document.getElementById('gameModal').style.display='flex';
   },150);
 }
@@ -341,27 +349,24 @@ document.getElementById("searchBarApps").addEventListener("keyup",function(){
   });
 });
 
-// --- Load JSON ---
-fetch("games.json").then(r=>r.json()).then(data=>{
-  const grid=document.getElementById("gamesGrid");
-  data.forEach(g=>{
-    const item=document.createElement("div");
-    item.classList.add("item"); item.setAttribute("data-title",g.title);
-    item.onclick=()=>openModal(g.url);
-    item.innerHTML=`<img src="${g.thumbnail}" alt="${g.title}"><span>${g.title}</span>`;
-    grid.appendChild(item);
-  });
-});
-fetch("apps.json").then(r=>r.json()).then(data=>{
-  const grid=document.getElementById("appsGrid");
-  data.forEach(app=>{
-    const item=document.createElement("div");
-    item.classList.add("item"); item.setAttribute("data-title",app.title);
-    item.onclick=()=>openModal(app.url);
-    item.innerHTML=`<img src="${app.thumbnail}" alt="${app.title}"><span>${app.title}</span>`;
-    grid.appendChild(item);
-  });
-});
+// --- Load JSON with proxy ---
+function loadItems(jsonFile, gridId){
+  fetch(jsonFile)
+    .then(r=>r.json())
+    .then(data=>{
+      const grid=document.getElementById(gridId);
+      data.forEach(item=>{
+        const div=document.createElement("div");
+        div.classList.add("item");
+        div.setAttribute("data-title", item.title);
+        div.onclick = ()=>openModal(item.url);
+        div.innerHTML = `<img src="${item.thumbnail}" alt="${item.title}"><span>${item.title}</span>`;
+        grid.appendChild(div);
+      });
+    });
+}
+loadItems("games.json","gamesGrid");
+loadItems("apps.json","appsGrid");
 
 // --- Last Updated ---
 document.getElementById("lastUpdated").textContent =
