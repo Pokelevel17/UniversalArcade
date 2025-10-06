@@ -47,7 +47,8 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 .homepage-buttons { display:flex; justify-content:center; flex-wrap:wrap; gap:18px; }
 .homepage-buttons button {
   padding:14px 34px;
-  font-size:1.1rem; font-weight:600;
+  font-size:1.1rem;
+  font-weight:600;
   border-radius:14px;
   color:#fff;
   background:linear-gradient(135deg,#4da6ff,#8c5bff);
@@ -77,9 +78,9 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   background:rgba(255,255,255,0.07); color:#fff;
   font-size:1rem; outline:none;
 }
-#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
+#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa'; }
 
-/* --- Grid Tiles --- */
+/* --- Grid Tiles Fixed Size --- */
 .grid {
   display:grid;
   grid-template-columns:repeat(auto-fill, 180px);
@@ -87,30 +88,40 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   gap:20px;
 }
 .item {
-  width:180px; height:240px;
-  position: relative; overflow: hidden;
-  border-radius: 16px; cursor: pointer;
+  width:180px;
+  height:240px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.05));
   box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-  display: flex; flex-direction: column; align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .item img {
-  width: 100%; height: 140px;
+  width: 100%;
+  height: 140px;
   object-fit: cover;
   border-bottom: 1px solid rgba(255,255,255,0.1);
   transition: transform 0.3s;
 }
 .item span {
-  padding: 12px; font-weight: 600;
-  font-size: 0.95rem; text-align: center;
-  color: #fff; flex-grow: 1;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  color: #fff;
+  flex-grow: 1;
 }
 .item:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
 .item:hover img { transform: scale(1.05); }
 .item::after {
   content: "";
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%);
   pointer-events: none;
 }
@@ -169,9 +180,18 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
       </div>
     </div>
     <div class="features">
-      <div class="feature"><h3>⚡ Fast Loading</h3><p>Optimized for speed so your favorite games and apps launch instantly.</p></div>
-      <div class="feature"><h3>🖥️ Fullscreen Mode</h3><p>Enjoy a fully immersive experience with one-click fullscreen support.</p></div>
-      <div class="feature"><h3>🎨 Clean UI</h3><p>A modern, distraction-free design that focuses on what you love.</p></div>
+      <div class="feature">
+        <h3>⚡ Fast Loading</h3>
+        <p>Optimized for speed so your favorite games and apps launch instantly.</p>
+      </div>
+      <div class="feature">
+        <h3>🖥️ Fullscreen Mode</h3>
+        <p>Enjoy a fully immersive experience with one-click fullscreen support.</p>
+      </div>
+      <div class="feature">
+        <h3>🎨 Clean UI</h3>
+        <p>A modern, distraction-free design that focuses on what you love.</p>
+      </div>
     </div>
     <div style="margin-top:50px; text-align:center; color:#aaa; font-size:0.9rem;">
       <p>Made by <strong>Fusionzzz</strong></p>
@@ -274,40 +294,27 @@ document.getElementById("searchBarApps").addEventListener("keyup",function(){
   });
 });
 
-// --- Load Games Automatically ---
-fetch("games.json")
+// --- Load games from 3kh0-lite repo ---
+fetch("https://api.github.com/repos/3kh0/3kh0-lite/contents/projects")
   .then(res => res.json())
-  .then(games => {
+  .then(files => {
     const grid = document.getElementById("gamesGrid");
-    grid.innerHTML = "";
-    games.forEach(game => {
-      const title = game.name || game.title || "Unknown Game";
-      const url = game.file || game.url || "";
-      const thumb = game.thumbnail || "https://via.placeholder.com/180x140?text=Game";
-      const item = document.createElement("div");
-      item.classList.add("item");
-      item.setAttribute("data-title", title);
-      item.onclick = () => openModal(url);
-      item.innerHTML = `<img src="${thumb}" alt="${title}"><span>${title}</span>`;
-      grid.appendChild(item);
+    files.forEach(f => {
+      if(f.name.endsWith(".html")){
+        const title = f.name.replace(".html","");
+        const url = f.download_url;
+        const thumbnail = "https://via.placeholder.com/180x140?text=" + encodeURIComponent(title);
+
+        const item = document.createElement("div");
+        item.classList.add("item");
+        item.setAttribute("data-title", title);
+        item.onclick = () => openModal(url);
+        item.innerHTML = `<img src="${thumbnail}" alt="${title}"><span>${title}</span>`;
+        grid.appendChild(item);
+      }
     });
   })
-  .catch(err => {
-    console.error("Failed to load games.json:", err);
-    document.getElementById("gamesGrid").innerHTML = "<p style='color:#aaa;'>No games found.</p>";
-  });
-
-// --- Load Apps (unchanged) ---
-fetch("apps.json").then(r=>r.json()).then(data=>{
-  const grid=document.getElementById("appsGrid");
-  data.forEach(app=>{
-    const item=document.createElement("div");
-    item.classList.add("item"); item.setAttribute("data-title",app.title);
-    item.onclick=()=>openModal(app.url);
-    item.innerHTML=`<img src="${app.thumbnail}" alt="${app.title}"><span>${app.title}</span>`;
-    grid.appendChild(item);
-  });
-});
+  .catch(err => console.error("Error loading games:", err));
 
 // --- Last Updated ---
 document.getElementById("lastUpdated").textContent =
