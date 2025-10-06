@@ -47,8 +47,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
 .homepage-buttons { display:flex; justify-content:center; flex-wrap:wrap; gap:18px; }
 .homepage-buttons button {
   padding:14px 34px;
-  font-size:1.1rem;
-  font-weight:600;
+  font-size:1.1rem; font-weight:600;
   border-radius:14px;
   color:#fff;
   background:linear-gradient(135deg,#4da6ff,#8c5bff);
@@ -78,7 +77,7 @@ nav button.active, nav button:hover { background:rgba(255,255,255,0.1); color:#f
   background:rgba(255,255,255,0.07); color:#fff;
   font-size:1rem; outline:none;
 }
-#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa'; }
+#searchBar::placeholder, #searchBarApps::placeholder { color:#aaa; }
 
 /* --- Grid Tiles Fixed Size --- */
 .grid {
@@ -294,27 +293,37 @@ document.getElementById("searchBarApps").addEventListener("keyup",function(){
   });
 });
 
-// --- Load games from 3kh0-lite repo ---
-fetch("https://api.github.com/repos/3kh0/3kh0-lite/contents/projects")
-  .then(res => res.json())
-  .then(files => {
-    const grid = document.getElementById("gamesGrid");
-    files.forEach(f => {
-      if(f.name.endsWith(".html")){
-        const title = f.name.replace(".html","");
-        const url = f.download_url;
-        const thumbnail = "https://via.placeholder.com/180x140?text=" + encodeURIComponent(title);
+// --- Load Games from 3kh0-lite ---
+async function loadGames() {
+  const grid = document.getElementById("gamesGrid");
+  grid.innerHTML = "";
 
+  async function fetchFolder(url, path="") {
+    const res = await fetch(url);
+    const files = await res.json();
+
+    for (const f of files) {
+      if (f.type === "file" && f.name.endsWith(".html")) {
+        if (f.name.toLowerCase() === "index.html" && path !== "") continue;
+        const title = path ? `${path}/${f.name.replace(".html","")}` : f.name.replace(".html","");
+        const rawUrl = `https://raw.githubusercontent.com/3kh0/3kh0-lite/main/projects/${title}.html`;
+        const thumbnail = "https://via.placeholder.com/180x140?text="+encodeURIComponent(title);
         const item = document.createElement("div");
         item.classList.add("item");
         item.setAttribute("data-title", title);
-        item.onclick = () => openModal(url);
+        item.onclick = () => openModal(rawUrl);
         item.innerHTML = `<img src="${thumbnail}" alt="${title}"><span>${title}</span>`;
         grid.appendChild(item);
+      } else if (f.type === "dir") {
+        await fetchFolder(f.url, f.name);
       }
-    });
-  })
-  .catch(err => console.error("Error loading games:", err));
+    }
+  }
+
+  await fetchFolder("https://api.github.com/repos/3kh0/3kh0-lite/contents/projects");
+}
+
+loadGames().catch(err => console.error("Error loading games:", err));
 
 // --- Last Updated ---
 document.getElementById("lastUpdated").textContent =
