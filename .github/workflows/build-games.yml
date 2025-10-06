@@ -1,0 +1,38 @@
+name: Auto Update games.json
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "games/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate games.json
+        run: |
+          echo "[" > games.json
+          first=true
+          for f in $(ls games); do
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> games.json
+            fi
+            name=$(basename "$f")
+            echo "  {\"name\": \"${name%.*}\", \"file\": \"games/$name\"}" >> games.json
+          done
+          echo "]" >> games.json
+
+      - name: Commit and push games.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add games.json
+          git commit -m "Auto update games.json" || echo "No changes to commit"
+          git push
