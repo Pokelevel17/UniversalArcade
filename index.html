@@ -283,13 +283,13 @@ function ytFullscreen(){ const ytFrame=document.getElementById("ytFrame"); if(yt
 document.getElementById("searchBar").addEventListener("keyup",function(){
   const filter=this.value.toLowerCase();
   document.querySelectorAll("#games .item").forEach(i=>{
-    i.style.visibility=i.getAttribute("data-title").toLowerCase().includes(filter)?'visible':'hidden';
+    i.style.display=i.getAttribute("data-title").toLowerCase().includes(filter)?'block':'none';
   });
 });
 document.getElementById("searchBarApps").addEventListener("keyup",function(){
   const filter=this.value.toLowerCase();
   document.querySelectorAll("#apps .item").forEach(i=>{
-    i.style.visibility=i.getAttribute("data-title").toLowerCase().includes(filter)?'visible':'hidden';
+    i.style.display=i.getAttribute("data-title").toLowerCase().includes(filter)?'block':'none';
   });
 });
 
@@ -298,24 +298,24 @@ async function loadGames() {
   const grid = document.getElementById("gamesGrid");
   grid.innerHTML = "";
 
-  async function fetchFolder(url, path="") {
-    const res = await fetch(url);
+  async function fetchFolder(apiUrl, folderPath="") {
+    const res = await fetch(apiUrl);
     const files = await res.json();
 
     for (const f of files) {
       if (f.type === "file" && f.name.endsWith(".html")) {
-        if (f.name.toLowerCase() === "index.html" && path !== "") continue;
-        const title = path ? `${path}/${f.name.replace(".html","")}` : f.name.replace(".html","");
-        const rawUrl = `https://raw.githubusercontent.com/3kh0/3kh0-lite/main/projects/${title}.html`;
+        if (f.name.toLowerCase() === "index.html" && folderPath) continue;
+        const title = folderPath ? `${folderPath}/${f.name.replace(".html","")}` : f.name.replace(".html","");
+        const rawUrl = `https://raw.githubusercontent.com/3kh0/3kh0-lite/main/projects/${folderPath ? folderPath + "/" : ""}${f.name}`;
         const thumbnail = "https://via.placeholder.com/180x140?text="+encodeURIComponent(title);
         const item = document.createElement("div");
-        item.classList.add("item");
+        item.className = "item";
         item.setAttribute("data-title", title);
         item.onclick = () => openModal(rawUrl);
         item.innerHTML = `<img src="${thumbnail}" alt="${title}"><span>${title}</span>`;
         grid.appendChild(item);
       } else if (f.type === "dir") {
-        await fetchFolder(f.url, f.name);
+        await fetchFolder(f.url, folderPath ? `${folderPath}/${f.name}` : f.name);
       }
     }
   }
@@ -323,7 +323,7 @@ async function loadGames() {
   await fetchFolder("https://api.github.com/repos/3kh0/3kh0-lite/contents/projects");
 }
 
-loadGames().catch(err => console.error("Error loading games:", err));
+loadGames().catch(err => console.error(err));
 
 // --- Last Updated ---
 document.getElementById("lastUpdated").textContent =
